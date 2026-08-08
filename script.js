@@ -11,3 +11,4 @@ botao.addEventListener("click", function() {
     foto.src = "https://picsum.photos/401/300";
 
 });
+document.getElementById("foto");

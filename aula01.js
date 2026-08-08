@@ -13,3 +13,7 @@ console.log(pontos);
 pontos = 20;
 
 console.log(pontos);
+
+const nome = "Mateus";
+
+console.log(nome);

@@ -1,19 +1,22 @@
-let nome = "Mateus";
-let idade = 18;
-let cidade = "São Paulo";
+let fotos = [
+    "https://picsum.photos/id/10/500/300",
+    "https://picsum.photos/id/20/500/300",
+    "https://picsum.photos/id/30/500/300"
+];
 
-console.log(nome);
-console.log(idade);
-console.log(cidade);
+let numero = 0;
 
-let pontos = 10;
+let foto = document.getElementById("foto");
+let botao = document.getElementById("botao");
 
-console.log(pontos);
+botao.addEventListener("click", function() {
 
-pontos = 20;
+    numero++;
 
-console.log(pontos);
+    if (numero >= fotos.length) {
+        numero = 0;
+    }
 
-const nome = "Mateus";
+    foto.src = fotos[numero];
 
-console.log(nome);
+});

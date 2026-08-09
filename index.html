@@ -1,45 +1,635 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-    <meta charset="UTF-8">
-    <title>Minha Galeria</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FotoShop — Venda de Fotos</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f7f7f8;
+      color: #18181b;
+    }
+
+    header {
+      background: #fff;
+      border-bottom: 1px solid #e5e5e5;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .navbar {
+      max-width: 1200px;
+      margin: auto;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 800;
+      color: #111;
+    }
+
+    .logo span {
+      color: #6c5ce7;
+    }
+
+    nav {
+      display: flex;
+      gap: 25px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #555;
+      font-size: 15px;
+    }
+
+    nav a:hover {
+      color: #6c5ce7;
+    }
+
+    .cart {
+      background: #6c5ce7;
+      color: white;
+      border: none;
+      padding: 11px 17px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .hero {
+      max-width: 1200px;
+      margin: 50px auto 30px;
+      padding: 0 20px;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 42px;
+      margin-bottom: 12px;
+    }
+
+    .hero p {
+      color: #666;
+      font-size: 17px;
+      margin-bottom: 25px;
+    }
+
+    .search {
+      width: 100%;
+      max-width: 600px;
+      margin: auto;
+      position: relative;
+    }
+
+    .search input {
+      width: 100%;
+      padding: 16px 20px;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      font-size: 16px;
+      outline: none;
+      background: white;
+    }
+
+    .search input:focus {
+      border-color: #6c5ce7;
+    }
+
+    .categories {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 20px;
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+    }
+
+    .category {
+      background: white;
+      border: 1px solid #ddd;
+      padding: 10px 18px;
+      border-radius: 30px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .category.active,
+    .category:hover {
+      background: #6c5ce7;
+      color: white;
+      border-color: #6c5ce7;
+    }
+
+    .gallery {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 20px;
+
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .photo-card {
+      background: white;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,.06);
+      transition: .2s;
+    }
+
+    .photo-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 25px rgba(0,0,0,.1);
+    }
+
+    .photo-container {
+      position: relative;
+      height: 230px;
+      overflow: hidden;
+    }
+
+    .photo-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: .3s;
+    }
+
+    .photo-card:hover img {
+      transform: scale(1.05);
+    }
+
+    .favorite {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 35px;
+      height: 35px;
+      border: none;
+      border-radius: 50%;
+      background: rgba(255,255,255,.9);
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .photo-info {
+      padding: 15px;
+    }
+
+    .photo-info h3 {
+      font-size: 16px;
+      margin-bottom: 7px;
+    }
+
+    .author {
+      color: #888;
+      font-size: 13px;
+      margin-bottom: 15px;
+    }
+
+    .bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .price {
+      font-size: 18px;
+      font-weight: bold;
+      color: #6c5ce7;
+    }
+
+    .buy {
+      background: #111;
+      color: white;
+      border: none;
+      padding: 9px 13px;
+      border-radius: 7px;
+      cursor: pointer;
+    }
+
+    .buy:hover {
+      background: #6c5ce7;
+    }
+
+    footer {
+      margin-top: 70px;
+      background: #111;
+      color: white;
+      padding: 40px 20px;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      gap: 30px;
+    }
+
+    footer p {
+      color: #aaa;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 900px) {
+      .gallery {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 650px) {
+      nav {
+        display: none;
+      }
+
+      .hero h1 {
+        font-size: 32px;
+      }
+
+      .gallery {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+
+      .photo-container {
+        height: 180px;
+      }
+
+      .footer-content {
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .gallery {
+        grid-template-columns: 1fr;
+      }
+
+      .photo-container {
+        height: 250px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-    <h1>Minha Galeria de Fotos</h1>
+<header>
+  <div class="navbar">
 
-    <button onclick="selecionarFoto()">
-        Selecionar foto
+    <div class="logo">
+      Foto<span>Shop</span>
+    </div>
+
+    <nav>
+      <a href="#">Início</a>
+      <a href="#">Explorar</a>
+      <a href="#">Categorias</a>
+      <a href="#">Vender fotos</a>
+    </nav>
+
+    <button class="cart" onclick="abrirCarrinho()">
+      🛒 Carrinho (<span id="cartCount">0</span>)
     </button>
 
-    <script src="script.js"></script>
+  </div>
+</header>
+
+
+<section class="hero">
+
+  <h1>Encontre a foto perfeita</h1>
+
+  <p>
+    Fotos incríveis de fotógrafos independentes.
+  </p>
+
+  <div class="search">
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="Pesquisar fotos..."
+      onkeyup="buscarFotos()"
+    >
+  </div>
+
+</section>
+
+
+<div class="categories">
+
+  <button class="category active" onclick="filtrar('todas', this)">
+    Todas
+  </button>
+
+  <button class="category" onclick="filtrar('natureza', this)">
+    Natureza
+  </button>
+
+  <button class="category" onclick="filtrar('cidade', this)">
+    Cidade
+  </button>
+
+  <button class="category" onclick="filtrar('pessoas', this)">
+    Pessoas
+  </button>
+
+  <button class="category" onclick="filtrar('animais', this)">
+    Animais
+  </button>
+
+  <button class="category" onclick="filtrar('viagem', this)">
+    Viagem
+  </button>
+
+</div>
+
+
+<main class="gallery" id="gallery">
+
+  <div class="photo-card" data-category="natureza" data-name="Montanhas">
+
+    <div class="photo-container">
+      <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80">
+
+      <button class="favorite" onclick="favoritar(this)">♡</button>
+    </div>
+
+    <div class="photo-info">
+      <h3>Montanhas</h3>
+      <div class="author">por Lucas Silva</div>
+
+      <div class="bottom">
+        <span class="price">R$ 19,90</span>
+        <button class="buy" onclick="comprar('Montanhas', 19.90)">
+          Comprar
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="photo-card" data-category="cidade" data-name="Cidade à noite">
+
+    <div class="photo-container">
+      <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=800&q=80">
+
+      <button class="favorite" onclick="favoritar(this)">♡</button>
+    </div>
+
+    <div class="photo-info">
+      <h3>Cidade à noite</h3>
+      <div class="author">por Mariana Costa</div>
+
+      <div class="bottom">
+        <span class="price">R$ 24,90</span>
+        <button class="buy" onclick="comprar('Cidade à noite', 24.90)">
+          Comprar
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="photo-card" data-category="animais" data-name="Cachorro">
+
+    <div class="photo-container">
+      <img src="https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=800&q=80">
+
+      <button class="favorite" onclick="favoritar(this)">♡</button>
+    </div>
+
+    <div class="photo-info">
+      <h3>Cachorro</h3>
+      <div class="author">por Pedro Oliveira</div>
+
+      <div class="bottom">
+        <span class="price">R$ 14,90</span>
+        <button class="buy" onclick="comprar('Cachorro', 14.90)">
+          Comprar
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="photo-card" data-category="viagem" data-name="Praia">
+
+    <div class="photo-container">
+      <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80">
+
+      <button class="favorite" onclick="favoritar(this)">♡</button>
+    </div>
+
+    <div class="photo-info">
+      <h3>Praia</h3>
+      <div class="author">por Ana Martins</div>
+
+      <div class="bottom">
+        <span class="price">R$ 29,90</span>
+        <button class="buy" onclick="comprar('Praia', 29.90)">
+          Comprar
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="photo-card" data-category="pessoas" data-name="Retrato">
+
+    <div class="photo-container">
+      <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=800&q=80">
+
+      <button class="favorite" onclick="favoritar(this)">♡</button>
+    </div>
+
+    <div class="photo-info">
+      <h3>Retrato</h3>
+      <div class="author">por Rafael Souza</div>
+
+      <div class="bottom">
+        <span class="price">R$ 17,90</span>
+        <button class="buy" onclick="comprar('Retrato', 17.90)">
+          Comprar
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="photo-card" data-category="natureza" data-name="Floresta">
+
+    <div class="photo-container">
+      <img src="https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=800&q=80">
+
+      <button class="favorite" onclick="favoritar(this)">♡</button>
+    </div>
+
+    <div class="photo-info">
+      <h3>Floresta</h3>
+      <div class="author">por João Mendes</div>
+
+      <div class="bottom">
+        <span class="price">R$ 21,90</span>
+        <button class="buy" onclick="comprar('Floresta', 21.90)">
+          Comprar
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+
+<footer>
+
+  <div class="footer-content">
+
+    <div>
+      <strong>FotoShop</strong>
+      <p>Marketplace de fotografias.</p>
+    </div>
+
+    <div>
+      <strong>Para fotógrafos</strong>
+      <p>Venda suas fotografias e alcance novos clientes.</p>
+    </div>
+
+    <div>
+      <strong>© 2026 FotoShop</strong>
+      <p>Todos os direitos reservados.</p>
+    </div>
+
+  </div>
+
+</footer>
+
+
+<script>
+
+  let carrinho = [];
+
+  function comprar(nome, preco) {
+
+    carrinho.push({
+      nome: nome,
+      preco: preco
+    });
+
+    document.getElementById("cartCount").innerText =
+      carrinho.length;
+
+    alert(nome + " foi adicionada ao carrinho!");
+  }
+
+
+  function abrirCarrinho() {
+
+    if (carrinho.length === 0) {
+      alert("Seu carrinho está vazio.");
+      return;
+    }
+
+    let total = carrinho.reduce(
+      (sum, item) => sum + item.preco,
+      0
+    );
+
+    let produtos = carrinho
+      .map(item => item.nome + " — R$ " + item.preco.toFixed(2))
+      .join("\n");
+
+    alert(
+      "🛒 Seu carrinho:\n\n" +
+      produtos +
+      "\n\nTotal: R$ " +
+      total.toFixed(2)
+    );
+  }
+
+
+  function favoritar(botao) {
+
+    if (botao.innerText === "♡") {
+      botao.innerText = "♥";
+      botao.style.color = "#e74c3c";
+    } else {
+      botao.innerText = "♡";
+      botao.style.color = "#111";
+    }
+
+  }
+
+
+  function filtrar(categoria, botao) {
+
+    document.querySelectorAll(".category").forEach(btn => {
+      btn.classList.remove("active");
+    });
+
+    botao.classList.add("active");
+
+    document.querySelectorAll(".photo-card").forEach(card => {
+
+      if (
+        categoria === "todas" ||
+        card.dataset.category === categoria
+      ) {
+        card.style.display = "block";
+      } else {
+        card.style.display = "none";
+      }
+
+    });
+
+  }
+
+
+  function buscarFotos() {
+
+    const texto =
+      document.getElementById("searchInput")
+      .value
+      .toLowerCase();
+
+    document.querySelectorAll(".photo-card").forEach(card => {
+
+      const nome = card.dataset.name.toLowerCase();
+
+      if (nome.includes(texto)) {
+        card.style.display = "block";
+      } else {
+        card.style.display = "none";
+      }
+
+    });
+
+  }
+
+</script>
 
 </body>
-
 </html>
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <title>Minha Galeria</title>
-</head>
-
-<body>
-
-    <h1>Escolha sua foto</h1>
-
-    <img id="foto" src="https://picsum.photos/400/300">
-
-    <br><br>
-
-    <button id="botao"> id="foto"
-        Trocar foto
-    </button>
-
-    <script src="script.js"></script>
-
-</body>
-</html>
-
